@@ -68,8 +68,9 @@ def explain_risk(input_df: pd.DataFrame, model) -> list[tuple[str, float]]:
 
 
 def generate_recommendations(input_data: dict, model, target_risk: float = 0.35) -> dict:
-    input_data = normalize_input(input_data)
-    input_df   = pd.DataFrame([input_data])
+    raw_data   = input_data.copy()          # ← keep original BEFORE normalization
+    normalized = normalize_input(raw_data)
+    input_df   = pd.DataFrame([normalized])
     base_risk  = float(model.predict_proba(input_df)[0][1])
     recommendations = []
 
@@ -78,15 +79,15 @@ def generate_recommendations(input_data: dict, model, target_risk: float = 0.35)
 
     # Option A: reduce loan amount
     for pct in [0.90, 0.80, 0.70, 0.60, 0.50, 0.40, 0.30]:
-        new_data = input_data.copy()
-        new_data["loan_amnt"] = int(input_data["loan_amnt"] * pct)
-        new_data = normalize_input(new_data)
-        new_risk = float(model.predict_proba(pd.DataFrame([new_data]))[0][1])
+        new_data = raw_data.copy()                        # ← copy from raw, not normalized
+        new_data["loan_amnt"] = int(raw_data["loan_amnt"] * pct)
+        new_norm = normalize_input(new_data)              # ← fresh normalization
+        new_risk = float(model.predict_proba(pd.DataFrame([new_norm]))[0][1])
 
         if new_risk <= target_risk:
             recommendations.append({
                 "type":     "Reduce Loan Amount",
-                "new_loan": new_data["loan_amnt"],
+                "new_loan": new_norm["loan_amnt"],
                 "pct_kept": pct,
                 "risk":     new_risk,
                 "impact":   round(base_risk - new_risk, 4),
@@ -94,14 +95,14 @@ def generate_recommendations(input_data: dict, model, target_risk: float = 0.35)
             break
 
     # Option B: extend loan tenure
-    current_term = input_data.get("loan_term", 0)
+    current_term = raw_data.get("loan_term", 0)           # ← read from raw
     for tenure_months in [36, 48, 60, 84, 120]:
         if tenure_months <= current_term:
             continue
-        new_data = input_data.copy()
+        new_data = raw_data.copy()                        # ← copy from raw
         new_data["loan_term"] = tenure_months
-        new_data = normalize_input(new_data)
-        new_risk = float(model.predict_proba(pd.DataFrame([new_data]))[0][1])
+        new_norm = normalize_input(new_data)              # ← fresh normalization
+        new_risk = float(model.predict_proba(pd.DataFrame([new_norm]))[0][1])
 
         if new_risk <= target_risk:
             recommendations.append({
