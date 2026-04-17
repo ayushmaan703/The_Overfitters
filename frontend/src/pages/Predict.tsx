@@ -29,20 +29,22 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useSelector } from "react-redux";
 
 type FormState = {
   person_age: string;
-  person_gender: string;
-  person_education: string;
   person_income: string;
   person_emp_exp: string;
-  person_home_ownership: string;
-  loan_amnt: string;
-  loan_intent: string;
-  loan_int_rate: string;
-  loan_percent_income: string;
-  cb_person_cred_hist_length: string;
   credit_score: string;
+  loan_amnt: string;
+  loan_int_rate: string;
+  loan_term: string;
+  loan_intent: string;
+  person_home_ownership: string;
+  cb_person_cred_hist_length: string;
+  person_gender: string;
+  person_education: string;
+  loan_percent_income: string;
   previous_loan_defaults_on_file: string;
 };
 
@@ -55,6 +57,7 @@ const initialForm: FormState = {
   person_home_ownership: "RENT",
   loan_amnt: "12000",
   loan_intent: "PERSONAL",
+  loan_term: "36",
   loan_int_rate: "11.5",
   loan_percent_income: "0.18",
   cb_person_cred_hist_length: "7",
@@ -98,11 +101,11 @@ const computeVerdict = (f: FormState): Verdict => {
   const loan_to_income_ratio = income > 0 ? amnt / income : 1;
   const income_stability_score = Math.max(
     0,
-    Math.min(100, 40 + emp * 5 + (f.person_home_ownership === "OWN" ? 15 : 0))
+    Math.min(100, 40 + emp * 5 + (f.person_home_ownership === "OWN" ? 15 : 0)),
   );
   const credit_utilization_proxy = Math.max(
     0,
-    Math.min(100, 100 - (score - 300) / 5.5)
+    Math.min(100, 100 - (score - 300) / 5.5),
   );
 
   // weighted risk score
@@ -132,13 +135,16 @@ const computeVerdict = (f: FormState): Verdict => {
     },
     {
       label: `DTI ${(dti_estimated * 100).toFixed(1)}%`,
-      impact: dti_estimated > 0.35 ? ("increases" as const) : ("reduces" as const),
+      impact:
+        dti_estimated > 0.35 ? ("increases" as const) : ("reduces" as const),
       weight: Math.abs(dti_estimated - 0.3) * 120,
     },
     {
       label: `Loan-to-income ${(loan_to_income_ratio * 100).toFixed(1)}%`,
       impact:
-        loan_to_income_ratio > 0.3 ? ("increases" as const) : ("reduces" as const),
+        loan_to_income_ratio > 0.3
+          ? ("increases" as const)
+          : ("reduces" as const),
       weight: Math.abs(loan_to_income_ratio - 0.25) * 80,
     },
     {
@@ -212,7 +218,10 @@ const Field = ({
   hint?: string;
 }) => (
   <div className="space-y-1.5">
-    <Label htmlFor={htmlFor} className="text-xs font-medium text-muted-foreground">
+    <Label
+      htmlFor={htmlFor}
+      className="text-xs font-medium text-muted-foreground"
+    >
       {label}
     </Label>
     {children}
@@ -223,6 +232,9 @@ const Field = ({
 const Predict = () => {
   const [form, setForm] = useState<FormState>(initialForm);
   const [verdict, setVerdict] = useState<Verdict | null>(null);
+
+  const userData = useSelector((state: any) => state.user.userData);
+console.log(userData);
 
   const update = <K extends keyof FormState>(k: K, v: FormState[K]) =>
     setForm((p) => ({ ...p, [k]: v }));
@@ -254,7 +266,10 @@ const Predict = () => {
     return [
       { label: "Monthly income", value: `$${d.monthly_income.toFixed(0)}` },
       { label: "Estimated EMI", value: `$${d.estimated_emi.toFixed(0)}` },
-      { label: "DTI estimated", value: `${(d.dti_estimated * 100).toFixed(1)}%` },
+      {
+        label: "DTI estimated",
+        value: `${(d.dti_estimated * 100).toFixed(1)}%`,
+      },
       {
         label: "Loan-to-income",
         value: `${(d.loan_to_income_ratio * 100).toFixed(1)}%`,
@@ -347,7 +362,9 @@ const Predict = () => {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="High School">High School</SelectItem>
+                          <SelectItem value="High School">
+                            High School
+                          </SelectItem>
                           <SelectItem value="Associate">Associate</SelectItem>
                           <SelectItem value="Bachelor">Bachelor</SelectItem>
                           <SelectItem value="Master">Master</SelectItem>
@@ -361,22 +378,34 @@ const Predict = () => {
                         type="number"
                         className={inputCls}
                         value={form.person_income}
-                        onChange={(e) => update("person_income", e.target.value)}
+                        onChange={(e) =>
+                          update("person_income", e.target.value)
+                        }
                       />
                     </Field>
-                    <Field label="Employment exp (yrs)" htmlFor="person_emp_exp">
+                    <Field
+                      label="Employment exp (yrs)"
+                      htmlFor="person_emp_exp"
+                    >
                       <Input
                         id="person_emp_exp"
                         type="number"
                         className={inputCls}
                         value={form.person_emp_exp}
-                        onChange={(e) => update("person_emp_exp", e.target.value)}
+                        onChange={(e) =>
+                          update("person_emp_exp", e.target.value)
+                        }
                       />
                     </Field>
-                    <Field label="Home ownership" htmlFor="person_home_ownership">
+                    <Field
+                      label="Home ownership"
+                      htmlFor="person_home_ownership"
+                    >
                       <Select
                         value={form.person_home_ownership}
-                        onValueChange={(v) => update("person_home_ownership", v)}
+                        onValueChange={(v) =>
+                          update("person_home_ownership", v)
+                        }
                       >
                         <SelectTrigger className={inputCls}>
                           <SelectValue />
@@ -436,7 +465,9 @@ const Predict = () => {
                         step="0.1"
                         className={inputCls}
                         value={form.loan_int_rate}
-                        onChange={(e) => update("loan_int_rate", e.target.value)}
+                        onChange={(e) =>
+                          update("loan_int_rate", e.target.value)
+                        }
                       />
                     </Field>
                     <Field

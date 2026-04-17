@@ -2,30 +2,33 @@ import { Link, useNavigate } from "react-router-dom";
 import { Sparkles, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import { userLogout } from "../store/slice/userSlice";
 
 const navItems = [
-  { label: "Features", href: "/dashboard#features" },
-  { label: "How it works", href: "/dashboard#how" },
-  { label: "Risk model", href: "/dashboard#model" },
-  { label: "Predict", href: "/predict" },
-  { label: "FAQ", href: "/dashboard#faq" },
+  { label: "Features", href: "/#features" },
+  { label: "How it works", href: "/#how" },
+  { label: "Risk model", href: "/#model" },
+  { label: "FAQ", href: "/#faq" },
 ];
 
-const SiteNav = ({ authed = false }: { authed?: boolean }) => {
+const SiteNav = ({ authed = false }) => {
+const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSignOut = () => {
+    dispatch(userLogout());
     toast.success("Signed out");
     navigate("/");
   };
-
+  const authStatus = useSelector((state) => state.user.status);
   return (
     <header className="sticky top-4 z-40 mx-auto w-full max-w-6xl px-4">
       <nav
         className="flex items-center justify-between rounded-2xl border border-border/60 px-4 py-2.5 backdrop-blur-xl sm:px-6"
         style={{ background: "var(--gradient-card)", boxShadow: "var(--shadow-card)" }}
       >
-        <Link to={authed ? "/dashboard" : "/"} className="flex items-center gap-2">
+        <Link to={authStatus ? "/" : "/login"} className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-brand shadow-[var(--shadow-glow)]">
             <Sparkles className="h-4 w-4 text-brand-foreground" />
           </div>
@@ -48,7 +51,7 @@ const SiteNav = ({ authed = false }: { authed?: boolean }) => {
         </ul>
 
         <div className="flex items-center gap-2">
-          {authed ? (
+          {authStatus ? (
             <Button
               variant="outline"
               size="sm"
@@ -59,8 +62,8 @@ const SiteNav = ({ authed = false }: { authed?: boolean }) => {
               Sign out
             </Button>
           ) : (
-            <Button asChild size="sm" className="bg-foreground text-background hover:bg-foreground/90">
-              <Link to="/">Sign in</Link>
+            <Button asChild size="sm" className="bg-foreground text-background hover:bg-foreground/90 ">
+              <Link to="/login">Sign in</Link>
             </Button>
           )}
         </div>

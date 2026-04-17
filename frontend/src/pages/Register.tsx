@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
-import { userLogin } from "../store/slice/userSlice";
+import { userLogin, createAccount } from "../store/slice/userSlice";
 
 const features = [
   {
@@ -43,10 +43,13 @@ const features = [
   },
 ];
 
-const Index = () => {
+const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
+  const [age, setAge] = useState("");
+  const [income, setIncome] = useState("");
+  const [empExp, setEmpExp] = useState("");
+  const [creditScore, setCreditScore] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -58,8 +61,11 @@ const Index = () => {
       return;
     }
     setLoading(true);
-    const res = await dispatch(userLogin({ email, password }));
-    if (res.type == "login/fulfilled") {
+    const res = await dispatch(
+      createAccount({ email, password, age, income, empExp, creditScore }),
+    );
+    if (res.type == "createAccount/fulfilled") {
+      await dispatch(userLogin({ email, password }));
       setLoading(false);
       toast.success("Welcome back to RiskLens");
       navigate("/");
@@ -117,7 +123,7 @@ const Index = () => {
             }}
           >
             <h2 className="text-4xl font-bold tracking-tight text-foreground">
-              Sign in
+              Sign Up
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
               Access your loan risk intelligence dashboard.
@@ -136,9 +142,8 @@ const Index = () => {
                   autoComplete="email"
                 />
               </div>
-
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
+                {/* <div className="flex items-center justify-between">
                   <Label htmlFor="password">Password</Label>
                   <button
                     type="button"
@@ -149,7 +154,7 @@ const Index = () => {
                   >
                     Forgot your password?
                   </button>
-                </div>
+                </div> */}
                 <Input
                   id="password"
                   type="password"
@@ -160,8 +165,43 @@ const Index = () => {
                   autoComplete="current-password"
                 />
               </div>
-
-              <div className="flex items-center gap-2">
+              <Input
+                id="age"
+                type="number"
+                placeholder="Age"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                className="h-11 bg-input/60"
+                autoComplete="current-password"
+              />{" "}
+              <Input
+                id="income"
+                type="number"
+                placeholder="Annual Income"
+                value={income}
+                onChange={(e) => setIncome(e.target.value)}
+                className="h-11 bg-input/60"
+                autoComplete="current-password"
+              />{" "}
+              <Input
+                id="empExp"
+                type="number"
+                placeholder="Employment Experience (years)"
+                value={empExp}
+                onChange={(e) => setEmpExp(e.target.value)}
+                className="h-11 bg-input/60"
+                autoComplete="current-password"
+              />{" "}
+              <Input
+                id="creditScore"
+                type="number"
+                placeholder="Credit Score"
+                value={creditScore}
+                onChange={(e) => setCreditScore(e.target.value)}
+                className="h-11 bg-input/60"
+                autoComplete="current-password"
+              />
+              {/* <div className="flex items-center gap-2">
                 <Checkbox
                   id="remember"
                   checked={remember}
@@ -173,55 +213,51 @@ const Index = () => {
                 >
                   Remember me
                 </Label>
-              </div>
-
+              </div> */}
               <Button
                 type="submit"
                 disabled={loading}
                 className="h-11 w-full bg-foreground text-background hover:bg-foreground/90"
               >
-                {loading ? "Signing in..." : "Sign in"}
+                {loading ? "Signing up..." : "Sign up"}
               </Button>
-
               <p className="text-center text-sm text-muted-foreground">
                 Don't have an account?{" "}
                 <button
                   type="button"
-                  onClick={() => navigate("/register")}
+                  onClick={() => navigate("/login")}
                   className="font-medium text-foreground underline-offset-4 hover:underline"
                 >
-                  Sign up
+                  Sign In
                 </button>
               </p>
-
-              <div className="flex items-center gap-3">
+              {/* <div className="flex items-center gap-3">
                 <Separator className="flex-1" />
                 <span className="text-xs uppercase tracking-wider text-muted-foreground">
                   or
                 </span>
                 <Separator className="flex-1" />
-              </div>
-
-              <div className="space-y-3">
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="h-11 w-full bg-transparent hover:bg-secondary"
-                  onClick={() => toast("Google sign-in coming soon")}
-                >
-                  <GoogleIcon className="mr-2 h-4 w-4" />
-                  Sign in with Google
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="h-11 w-full bg-transparent hover:bg-secondary"
-                  onClick={() => toast("Microsoft sign-in coming soon")}
-                >
-                  <MicrosoftIcon className="mr-2 h-4 w-4" />
-                  Sign in with Microsoft
-                </Button>
-              </div>
+              </div> */}
+              {/* <div className="space-y-3">
+                    <Button
+                    type="button"
+                    variant="outline"
+                    className="h-11 w-full bg-transparent hover:bg-secondary"
+                    onClick={() => toast("Google sign-in coming soon")}
+                    >
+                    <GoogleIcon className="mr-2 h-4 w-4" />
+                    Sign in with Google
+                    </Button>
+                    <Button
+                    type="button"
+                    variant="outline"
+                    className="h-11 w-full bg-transparent hover:bg-secondary"
+                    onClick={() => toast("Microsoft sign-in coming soon")}
+                    >
+                    <MicrosoftIcon className="mr-2 h-4 w-4" />
+                    Sign in with Microsoft
+                    </Button>
+                </div> */}
             </form>
           </div>
         </section>
@@ -248,4 +284,4 @@ const MicrosoftIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-export default Index;
+export default Register;

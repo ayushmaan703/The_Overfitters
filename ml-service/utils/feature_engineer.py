@@ -4,6 +4,8 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 class FeatureEngineer(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
+        self.income_max_ = X['person_income'].max()
+        self.emp_max_    = X['person_emp_exp'].max()
         return self
 
     def transform(self, X):
@@ -12,12 +14,9 @@ class FeatureEngineer(BaseEstimator, TransformerMixin):
         if 'previous_loan_defaults_on_file' in X.columns:
             X['previous_loan_defaults_on_file'] = (
                 X['previous_loan_defaults_on_file']
-                .astype(str)
-                .str.strip()
-                .str.upper()
-                .map({'Y': 1, 'N': 0})
-                .fillna(0)
-                .astype(float)
+                .astype(str).str.strip().str.upper()
+                .map({'Y': 1, 'N': 0, '1': 1, '0': 0, '1.0': 1, '0.0': 0})
+                .fillna(0).astype(float)
             )
 
         numeric_cols = [
@@ -29,12 +28,15 @@ class FeatureEngineer(BaseEstimator, TransformerMixin):
                 X[col] = pd.to_numeric(X[col], errors='coerce')
 
         X['loan_to_income_ratio'] = X['loan_amnt'] / (X['person_income'] + 1)
-        X['monthly_income'] = X['person_income'] / 12
-        X['estimated_emi'] = (X['loan_amnt'] * X['loan_int_rate']) / 12
-        X['dti_estimated'] = X['estimated_emi'] / (X['monthly_income'] + 1)
+        X['monthly_income']       = X['person_income'] / 12
+        X['estimated_emi']        = (X['loan_amnt'] * X['loan_int_rate']) / 12
+        X['dti_estimated']        = X['estimated_emi'] / (X['monthly_income'] + 1)
 
-        income_norm = X['person_income'] / X['person_income'].max()
-        exp_norm = X['person_emp_exp'] / X['person_emp_exp'].max()
+        income_max = getattr(self, 'income_max_', X['person_income'].max())
+        emp_max    = getattr(self, 'emp_max_',    X['person_emp_exp'].max())
+
+        income_norm = X['person_income'] / (income_max + 1)
+        exp_norm    = X['person_emp_exp'] / (emp_max    + 1)
 
         X['income_stability_score'] = (0.7 * income_norm + 0.3 * exp_norm)
         X['income_stability_score'] -= 0.2 * X['previous_loan_defaults_on_file']

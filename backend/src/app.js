@@ -7,7 +7,7 @@ const app = express()
 app.use(
     cors({
         origin: [
-            "https://videotubefrontend.netlify.app",
+            "http://localhost:8080",
         ],
         credentials: true, 
         methods: "GET,POST,PUT,DELETE,OPTIONS,PATCH",

@@ -1,4 +1,4 @@
-import asyncHandler from "../utils/asyncHandler.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import APIerror from "../utils/ApiError.js";
 import APIresponse from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
@@ -20,16 +20,16 @@ const generateRefreshAndAccessTokens = async (userId) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { userName, password } = req.body;
-  if (userName == "") {
-    throw new APIerror(400, "UserName is required !!");
+  const { email, password, age, income, empExp, creditScore } = req.body;
+  if (email == "") {
+    throw new APIerror(400, "email is required !!");
   }
   if (password == "") {
     throw new APIerror(400, "Password is required !!");
   }
 
   const uniqueUser = await User.findOne({
-    $or: [{ userName }],
+    $or: [{ email }],
   });
   if (uniqueUser) {
     throw new APIerror(409, "User already exists ");
@@ -45,8 +45,12 @@ const registerUser = asyncHandler(async (req, res) => {
   //     throw new APIerror(400, " Avatar is required")
   // }
   const user = await User.create({
-    userName,
+    email,
     password,
+    age,
+    income,
+    empExp,
+    creditScore,
   });
   const isUserCreated = await User.findById(user._id).select(
     "-password -refreshToken",
@@ -58,14 +62,15 @@ const registerUser = asyncHandler(async (req, res) => {
     .status(200)
     .json(new APIresponse(200, isUserCreated, "User created successfully"));
 });
-const loginUser = asyncHandler(async (req, res) => {
-  const { userName, password } = req.body;
 
-  if (!userName) {
-    throw new APIerror(400, "UserName  is required");
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email) {
+    throw new APIerror(400, "email  is required");
   }
   const getUser = await User.findOne({
-    $or: [{ userName }],
+    $or: [{ email }],
   });
   if (!getUser) {
     throw new APIerror(404, "User not found");
@@ -101,6 +106,7 @@ const loginUser = asyncHandler(async (req, res) => {
       ),
     );
 });
+
 const logoutUser = asyncHandler(async (req, res) => {
   await User.findByIdAndUpdate(
     req.user._conditions._id,
@@ -124,6 +130,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     .clearCookie("refreshToken", options)
     .json(new APIresponse(200, {}, "User logged Out"));
 });
+
 const getRefreshToken = asyncHandler(async (req, res) => {
   const gettingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
   if (!gettingRefreshToken) {
@@ -166,6 +173,7 @@ const getRefreshToken = asyncHandler(async (req, res) => {
     throw new APIerror(401, error.message || "Invalid refresh token");
   }
 });
+
 const changePassword = asyncHandler(async (req, res) => {
   const { password, newPassword } = req.body;
   const user = await User.findById(req.user._conditions._id);
@@ -179,6 +187,7 @@ const changePassword = asyncHandler(async (req, res) => {
     .status(200)
     .json(new APIresponse(200, {}, "Password updated successfully"));
 });
+
 const getCurrentUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._conditions._id).select(
     "-password -refreshToken",
@@ -190,11 +199,12 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 
 const predictLoan = asyncHandler(async (req, res) => {
   const userData = req.body;
-
-  console.log("here1");
-  const response = await axios.post("http://localhost:8000/predict", userData);
-  console.log("here2");
-
+  // const response = await axios.post("http://localhost:8000/predict", userData);
+  // const response = await axios.post(
+  //   "http://localhost:8000/recommend",
+  //   userData,
+  // );
+  const response = await axios.post("http://localhost:8000/advice", userData);
   const result = response.data;
   return res.status(200).json(new APIresponse(200, result, " Successfully "));
 });

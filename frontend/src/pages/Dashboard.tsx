@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,9 @@ import {
 } from "@/components/ui/accordion";
 import SiteNav from "@/components/SiteNav";
 import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { currentUserInfo } from "../store/slice/userSlice";
+import Home from "../components/Home.jsx";
 
 const features = [
   {
@@ -93,6 +96,8 @@ const faqs = [
 ];
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState("");
 
   const handleStart = (e: React.FormEvent) => {
@@ -105,6 +110,13 @@ const Dashboard = () => {
     setEmail("");
   };
 
+  useEffect(() => {
+    const fetch = async () => {
+      dispatch(currentUserInfo());
+    };
+    fetch();
+  }, []);
+
   return (
     <main className="min-h-screen w-full pb-24 pt-6">
       <SiteNav authed />
@@ -115,14 +127,14 @@ const Dashboard = () => {
           <Sparkles className="h-3.5 w-3.5 text-brand" />
           AI-powered credit risk, built for modern lenders
         </div>
-
         <h1 className="mt-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl">
           Predict loan defaults{" "}
           <span className="text-gradient-brand">before they happen</span>
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-          RiskLens analyzes income patterns, repayment history, employment stability, and economic
-          indicators to give your credit team a precise probability of default — in milliseconds.
+          RiskLens analyzes income patterns, repayment history, employment
+          stability, and economic indicators to give your credit team a precise
+          probability of default — in milliseconds.
         </p>
 
         <form
@@ -136,12 +148,18 @@ const Dashboard = () => {
             onChange={(e) => setEmail(e.target.value)}
             className="h-11 bg-input/60"
           />
-          <Button type="submit" className="h-11 bg-foreground text-background hover:bg-foreground/90">
+          <Button
+            type="submit"
+            className="h-11 bg-foreground text-background hover:bg-foreground/90"
+          >
             Request a demo
           </Button>
         </form>
         <div className="mt-5 flex items-center justify-center">
-          <Button asChild className="h-11 bg-gradient-brand text-brand-foreground shadow-[var(--shadow-glow)] hover:opacity-95">
+          <Button
+            asChild
+            className="h-11 bg-gradient-brand text-brand-foreground shadow-[var(--shadow-glow)] hover:opacity-95"
+          >
             <Link to="/predict">
               Try the predictor <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
@@ -159,7 +177,8 @@ const Dashboard = () => {
             Built for credit teams that hate surprises
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Everything you need to underwrite smarter and shrink your loss curve.
+            Everything you need to underwrite smarter and shrink your loss
+            curve.
           </p>
         </div>
 
@@ -168,13 +187,18 @@ const Dashboard = () => {
             <div
               key={f.title}
               className="rounded-2xl border border-border p-6 transition-[transform,box-shadow] hover:-translate-y-0.5"
-              style={{ background: "var(--gradient-card)", boxShadow: "var(--shadow-card)" }}
+              style={{
+                background: "var(--gradient-card)",
+                boxShadow: "var(--shadow-card)",
+              }}
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-brand">
                 <f.icon className="h-5 w-5" />
               </div>
               <h3 className="mt-4 text-base font-semibold">{f.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                {f.body}
+              </p>
             </div>
           ))}
         </div>
@@ -202,7 +226,9 @@ const Dashboard = () => {
                 <s.icon className="h-5 w-5" />
               </div>
               <h3 className="mt-4 text-lg font-semibold">{s.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                {s.body}
+              </p>
             </div>
           ))}
         </div>
@@ -212,7 +238,10 @@ const Dashboard = () => {
       <section id="model" className="mx-auto mt-28 w-full max-w-6xl px-6">
         <div
           className="overflow-hidden rounded-3xl border border-border p-8 sm:p-12"
-          style={{ background: "var(--gradient-card)", boxShadow: "var(--shadow-card)" }}
+          style={{
+            background: "var(--gradient-card)",
+            boxShadow: "var(--shadow-card)",
+          }}
         >
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center">
             <div>
@@ -224,8 +253,9 @@ const Dashboard = () => {
                 80+ borrower & macro signals, weighted in real time
               </h2>
               <p className="mt-3 text-muted-foreground">
-                Our ensemble combines gradient-boosted trees with a neural module for sequential
-                repayment behavior. Trained on diverse portfolios — personal, SME, auto, and mortgage.
+                Our ensemble combines gradient-boosted trees with a neural
+                module for sequential repayment behavior. Trained on diverse
+                portfolios — personal, SME, auto, and mortgage.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <div className="rounded-xl border border-border bg-secondary/60 px-4 py-3">
@@ -234,10 +264,14 @@ const Dashboard = () => {
                 </div>
                 <div className="rounded-xl border border-border bg-secondary/60 px-4 py-3">
                   <p className="text-2xl font-bold text-foreground">22%</p>
-                  <p className="text-xs text-muted-foreground">Lift over scorecards</p>
+                  <p className="text-xs text-muted-foreground">
+                    Lift over scorecards
+                  </p>
                 </div>
                 <div className="rounded-xl border border-border bg-secondary/60 px-4 py-3">
-                  <p className="text-2xl font-bold text-foreground">&lt;120ms</p>
+                  <p className="text-2xl font-bold text-foreground">
+                    &lt;120ms
+                  </p>
                   <p className="text-xs text-muted-foreground">P95 latency</p>
                 </div>
               </div>
@@ -267,8 +301,14 @@ const Dashboard = () => {
         </div>
         <Accordion type="single" collapsible className="w-full">
           {faqs.map((f, i) => (
-            <AccordionItem key={f.q} value={`item-${i}`} className="border-border">
-              <AccordionTrigger className="text-left text-base">{f.q}</AccordionTrigger>
+            <AccordionItem
+              key={f.q}
+              value={`item-${i}`}
+              className="border-border"
+            >
+              <AccordionTrigger className="text-left text-base">
+                {f.q}
+              </AccordionTrigger>
               <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
                 {f.a}
               </AccordionContent>
@@ -281,16 +321,23 @@ const Dashboard = () => {
       <section className="mx-auto mt-24 w-full max-w-4xl px-6">
         <div
           className="rounded-3xl border border-border p-10 text-center sm:p-14"
-          style={{ background: "var(--gradient-card)", boxShadow: "var(--shadow-card)" }}
+          style={{
+            background: "var(--gradient-card)",
+            boxShadow: "var(--shadow-card)",
+          }}
         >
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
             Ready to underwrite with confidence?
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-            Plug RiskLens into your loan origination flow and start cutting defaults this quarter.
+            Plug RiskLens into your loan origination flow and start cutting
+            defaults this quarter.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <Button asChild className="h-11 bg-gradient-brand text-brand-foreground shadow-[var(--shadow-glow)] hover:opacity-95">
+            <Button
+              asChild
+              className="h-11 bg-gradient-brand text-brand-foreground shadow-[var(--shadow-glow)] hover:opacity-95"
+            >
               <a href="#features">
                 Explore features <ArrowRight className="ml-2 h-4 w-4" />
               </a>
