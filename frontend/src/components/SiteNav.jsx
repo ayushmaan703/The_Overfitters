@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Sparkles, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
+import { CreditWiseLogo } from "./ui/CreditWiseLogo";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,11 +30,9 @@ const dispatch = useDispatch();
         style={{ background: "var(--gradient-card)", boxShadow: "var(--shadow-card)" }}
       >
         <Link to={authStatus ? "/" : "/login"} className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-brand shadow-[var(--shadow-glow)]">
-            <Sparkles className="h-4 w-4 text-brand-foreground" />
-          </div>
+          <CreditWiseLogo className="h-8 w-8" />
           <span className="text-base font-semibold tracking-tight text-gradient-brand">
-            RiskLens
+            Credit Wise AI
           </span>
         </Link>
 

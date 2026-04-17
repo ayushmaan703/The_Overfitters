@@ -9,9 +9,9 @@ import {
   ShieldCheck,
   TrendingUp,
   BarChart3,
-  Sparkles,
   Activity,
 } from "lucide-react";
+import { CreditWiseLogo } from "@/components/ui/CreditWiseLogo";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { userLogin } from "../store/slice/userSlice";
@@ -61,7 +61,7 @@ const Index = () => {
     const res = await dispatch(userLogin({ email, password }));
     if (res.type == "login/fulfilled") {
       setLoading(false);
-      toast.success("Welcome back to RiskLens");
+      toast.success("Welcome back to Credit Wise AI");
       navigate("/");
     } else {
       setLoading(false);
@@ -70,44 +70,42 @@ const Index = () => {
   };
 
   return (
-    <main className="min-h-screen w-full">
-      <div className="mx-auto grid min-h-screen w-full max-w-7xl grid-cols-1 gap-10 px-6 py-10 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-16">
-        {/* Left: brand + features */}
-        <section className="order-2 lg:order-1">
-          <div className="mb-10 flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-brand shadow-[var(--shadow-glow)]">
-              <Sparkles className="h-5 w-5 text-brand-foreground" />
-            </div>
+    <main className="relative min-h-screen w-full overflow-hidden bg-background">
+      {/* Background Interactive Model */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-auto flex items-center justify-center"
+        style={{
+          maskImage: 'radial-gradient(circle at 15% 50%, black 30%, transparent 70%)',
+          WebkitMaskImage: 'radial-gradient(circle at 15% 50%, black 30%, transparent 70%)'
+        }}
+      >
+        <iframe
+          src="https://my.spline.design/interactiveaiwebsite-VVUUTK6sTIHmiPKdFTIuDuc0/"
+          frameBorder="0"
+          width="100%"
+          height="100%"
+          title="Interactive AI Website Model"
+          className="shrink-0 h-[120vh] w-[200vw] max-w-none origin-center -translate-x-[20vw] md:-translate-x-[30vw] lg:-translate-x-[40vw]"
+        ></iframe>
+      </div>
+
+      <div className="pointer-events-none relative z-10 mx-auto grid min-h-screen w-full max-w-7xl grid-cols-1 gap-10 px-6 py-10 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-16">
+        {/* Left: brand */}
+        <section className="order-2 lg:order-1 flex h-full flex-col justify-start">
+          <div className="pointer-events-auto mb-10 flex w-max items-center gap-2">
+            <CreditWiseLogo className="h-10 w-10" />
             <span className="text-xl font-semibold tracking-tight text-gradient-brand">
-              RiskLens
+              Credit Wise AI
             </span>
           </div>
 
           <h1 className="sr-only">
-            RiskLens — AI-Powered Loan Default Prediction
+            Credit Wise AI — AI-Powered Loan Default Prediction
           </h1>
-
-          <ul className="space-y-7">
-            {features.map((f) => (
-              <li key={f.title} className="flex gap-4">
-                <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-secondary text-brand">
-                  <f.icon className="h-5 w-5" />
-                </div>
-                <div>
-                  <h2 className="text-base font-semibold text-foreground">
-                    {f.title}
-                  </h2>
-                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                    {f.description}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
         </section>
 
         {/* Right: sign in card */}
-        <section className="order-1 lg:order-2">
+        <section className="pointer-events-auto order-1 lg:order-2">
           <div
             className="mx-auto w-full max-w-md rounded-2xl border border-border p-8 sm:p-10"
             style={{

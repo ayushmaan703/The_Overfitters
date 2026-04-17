@@ -90,7 +90,7 @@ const faqs = [
     a: "A CSV of historical loans with borrower demographics, income, employment, repayment outcomes, and the loan terms is enough to fine-tune the model on your portfolio.",
   },
   {
-    q: "Can RiskLens integrate with my LOS?",
+    q: "Can Credit Wise AI integrate with my LOS?",
     a: "Yes. We expose a REST API so your Loan Origination System can request a risk score in real time during underwriting.",
   },
 ];
@@ -118,56 +118,92 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <main className="min-h-screen w-full pb-24 pt-6">
-      <SiteNav authed />
-
-      {/* Hero */}
-      <section className="mx-auto mt-16 w-full max-w-5xl px-6 text-center sm:mt-24">
-        <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-border bg-secondary/60 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
-          <Sparkles className="h-3.5 w-3.5 text-brand" />
-          AI-powered credit risk, built for modern lenders
+    <main className="w-full pb-24">
+      {/* Hero Section Container */}
+      <section className="relative h-screen min-h-[700px] w-full overflow-hidden bg-background">
+        {/* Background 3D Model */}
+        <div className="absolute inset-0 z-0 pointer-events-auto flex items-center justify-center">
+          <iframe
+            src="https://my.spline.design/boxeshover-dxUC7tInNaRAqE3LamSpujyZ/"
+            frameBorder="0"
+            width="100%"
+            height="100%"
+            title="Interactive 3D Background"
+            className="h-full w-full scale-[1.5] origin-[50%_40%] sm:scale-[1.8] md:scale-[2]"
+          ></iframe>
+          <div className="pointer-events-none absolute inset-0 bg-background/20" />
+          <div className="pointer-events-none absolute bottom-0 left-0 h-40 w-full bg-gradient-to-t from-background to-transparent" />
         </div>
-        <h1 className="mt-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl">
-          Predict loan defaults{" "}
-          <span className="text-gradient-brand">before they happen</span>
-        </h1>
-        <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-          RiskLens analyzes income patterns, repayment history, employment
-          stability, and economic indicators to give your credit team a precise
-          probability of default — in milliseconds.
-        </p>
 
-        <form
-          onSubmit={handleStart}
-          className="mx-auto mt-8 flex w-full max-w-md flex-col items-stretch gap-2 sm:flex-row"
-        >
-          <Input
-            type="email"
-            placeholder="Your work email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="h-11 bg-input/60"
-          />
-          <Button
-            type="submit"
-            className="h-11 bg-foreground text-background hover:bg-foreground/90"
-          >
-            Request a demo
-          </Button>
-        </form>
-        <div className="mt-5 flex items-center justify-center">
-          <Button
-            asChild
-            className="h-11 bg-gradient-brand text-brand-foreground shadow-[var(--shadow-glow)] hover:opacity-95"
-          >
-            <Link to="/predict">
-              Try the predictor <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+        {/* Site Navigation */}
+        <div className="pointer-events-none absolute top-0 left-0 w-full z-50 pt-6">
+           <div className="pointer-events-auto">
+             <SiteNav authed />
+           </div>
         </div>
-        <p className="mt-3 text-xs text-muted-foreground">
-          Trusted by risk teams modeling $4B+ in originations.
-        </p>
+
+        {/* Hero Content positioned at the bottom */}
+        <div className="pointer-events-none relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-6 pb-20 sm:pb-32">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-12">
+            
+            {/* Left Side - Title */}
+            <div className="w-full md:w-[55%] text-left">
+              <div className="pointer-events-auto mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/80 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
+                <Sparkles className="h-3.5 w-3.5 text-brand" />
+                AI-powered credit risk, built for modern lenders
+              </div>
+              <h1 className="pointer-events-auto text-5xl font-bold tracking-tight text-foreground drop-shadow-md sm:text-6xl md:text-7xl">
+                Predict loan defaults{" "}
+                <br className="hidden md:block" />
+                <span className="text-gradient-brand">before they happen</span>
+              </h1>
+            </div>
+
+            {/* Right Side - Description and Form */}
+            <div className="w-full md:w-[40%] text-left flex flex-col gap-6">
+              <p className="pointer-events-auto text-base leading-relaxed text-muted-foreground drop-shadow sm:text-lg">
+                Credit Wise AI analyzes income patterns, repayment history, employment
+                stability, and economic indicators to give your credit team a precise
+                probability of default — in milliseconds.
+              </p>
+
+              <form
+                onSubmit={handleStart}
+                className="pointer-events-auto flex w-full flex-col items-stretch gap-3 sm:flex-row"
+              >
+                <Input
+                  type="email"
+                  placeholder="Your work email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="h-11 bg-input/80 backdrop-blur"
+                />
+                <Button
+                  type="submit"
+                  className="h-11 bg-foreground text-background hover:bg-foreground/90 shrink-0"
+                >
+                  Request a demo
+                </Button>
+              </form>
+
+              <div className="pointer-events-auto flex flex-wrap items-center justify-start gap-4">
+                <Button
+                  asChild
+                  className="h-11 bg-gradient-brand text-brand-foreground shadow-[var(--shadow-glow)] hover:opacity-95"
+                >
+                  <Link to="/predict">
+                    Try the predictor <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <span className="text-xs text-muted-foreground max-w-[200px]">
+                  Trusted by risk teams modeling $4B+ in originations.
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </section>
 
       {/* Features */}
@@ -330,7 +366,7 @@ const Dashboard = () => {
             Ready to underwrite with confidence?
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-            Plug RiskLens into your loan origination flow and start cutting
+            Plug Credit Wise AI into your loan origination flow and start cutting
             defaults this quarter.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
