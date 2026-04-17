@@ -115,13 +115,26 @@ const Predict = () => {
     setForm((p) => ({ ...p, [k]: v }));
 
   const dbCall = async (form: FormState) => {
+    // const data = {
+    //   ...form,
+    //   person_age: userData.age,
+    //   person_income: userData.income,
+    //   person_emp_exp: userData.empExp,
+    //   credit_score: userData.creditScore,
+    // };
     const data = {
-      ...form,
-      person_age: userData.age,
-      person_income: userData.income,
-      person_emp_exp: userData.empExp,
-      credit_score: userData.creditScore,
-    };
+  loan_amnt: Number(form.loan_amnt),
+  loan_int_rate: Number(form.loan_int_rate),
+  loan_term: Number(form.loan_term),
+  loan_intent: form.loan_intent,
+  person_home_ownership: form.person_home_ownership,
+  cb_person_default_on_file: form.cb_person_default_on_file,
+
+  person_income: Number(userData.income),
+  person_age: Number(userData.age),
+  person_emp_exp: Number(userData.empExp),
+  credit_score: Number(userData.creditScore),
+};
     const res = await dispatch(predictApi(data));
     console.log(res);
 

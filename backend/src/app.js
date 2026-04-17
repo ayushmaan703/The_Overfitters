@@ -7,7 +7,7 @@ const app = express()
 app.use(
     cors({
         origin: [
-            "http://localhost:8080",
+            "https://the-overfitters.vercel.app",
         ],
         credentials: true, 
         methods: "GET,POST,PUT,DELETE,OPTIONS,PATCH",
@@ -22,7 +22,7 @@ app.use(cookieParser())
 
 import userRouter from "./routes/user.routes.js"
 
-app.get("/", (res) => {
+app.get("/", (_,res) => {
     res.send("Welcome to the overfitter API")
 })
 

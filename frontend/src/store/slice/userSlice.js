@@ -49,6 +49,8 @@ export const predictApi = createAsyncThunk("predictApi", async (userData) => {
     toast.success("Prediction completed");
     return response.data.data;
   } catch (error) {
+    console.log(error);
+    
     toast.error(error?.response?.data?.message);
     throw error;
   }

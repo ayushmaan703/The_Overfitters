@@ -199,15 +199,24 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 
 const predictLoan = asyncHandler(async (req, res) => {
   const userData = req.body;
-  console.log(userData);
-  
+ console.log(userData);
+ 
   // const response = await axios.post("http://localhost:8000/predict", userData);
   // const response = await axios.post(
   //   "http://localhost:8000/recommend",
   //   userData,
   // );
-  const response = await axios.post("http://localhost:8000/advice", userData);
-  const result = response.data;
+  let response;
+  let health;
+try {
+     response = await axios.post("https://the-overfitters-1.onrender.com/advice", userData);
+    health = await axios.post("https://the-overfitters-1.onrender.com/health");
+    } catch (error) {
+    console.log("422 error details:", error.response?.data);
+}
+console.log(health);
+
+  const result = response?.data;
   return res.status(200).json(new APIresponse(200, result, " Successfully "));
 });
 
