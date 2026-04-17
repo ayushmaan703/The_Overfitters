@@ -85,3 +85,13 @@ def advice(data: LoanInput):
         raise HTTPException(status_code=422, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/health")
+def health():
+    import xgboost, sklearn, shap
+    return {
+        "xgboost": xgboost.__version__,
+        "sklearn": sklearn.__version__,
+        "shap":    shap.__version__,
+        "pandas":  pd.__version__,
+    }
