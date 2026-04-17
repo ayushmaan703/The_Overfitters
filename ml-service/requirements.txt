@@ -8,5 +8,5 @@ lightgbm
 shap
 pydantic
 joblib
-pickle
+# pickle
 python-multipart
