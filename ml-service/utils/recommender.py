@@ -117,16 +117,20 @@ def generate_recommendations(input_data: dict, model, target_risk: float = 0.35)
 
 
 def get_advice_data(input_data: dict, model) -> dict:
-    """
-    Single call that returns risk score, SHAP explanation,
-    and recommendations — mirrors the notebook's get_advice().
-    """
     data_norm  = normalize_input(input_data)
     input_df   = pd.DataFrame([data_norm])
 
     risk        = float(model.predict_proba(input_df)[0][1])
     explanation = explain_risk(input_df, model)
     recs        = generate_recommendations(input_data, model)
+
+    # Fallback when generate_recommendations returns nothing actionable
+    if not recs.get("message") and not recs.get("recommendations"):
+        recs = {
+            "base_risk": risk,
+            "recommendations": [],
+            "message": "No simple fix found — consider reducing loan significantly or improving credit score."
+        }
 
     return {
         "risk_score": risk,
@@ -138,9 +142,9 @@ def get_advice_data(input_data: dict, model) -> dict:
         "loan_grade": data_norm["loan_grade"],
         "top_risk_factors": [
             {
-                "feature":   feat,
+                "feature":    feat,
                 "shap_value": val,
-                "direction": "increases risk" if val > 0 else "decreases risk",
+                "direction":  "increases risk" if val > 0 else "decreases risk",
             }
             for feat, val in explanation
         ],
