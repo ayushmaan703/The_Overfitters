@@ -43,11 +43,11 @@ export const userLogout = createAsyncThunk("logout", async () => {
   }
 });
 
-export const predict = createAsyncThunk("predict", async () => {
+export const predictApi = createAsyncThunk("predictApi", async (userData) => {
   try {
-    const response = await axiosInstance.post("/user/predict");
+    const response = await axiosInstance.post("/user/predict", userData);
     toast.success("Prediction completed");
-    return response.data?.message;
+    return response.data.data;
   } catch (error) {
     toast.error(error?.response?.data?.message);
     throw error;

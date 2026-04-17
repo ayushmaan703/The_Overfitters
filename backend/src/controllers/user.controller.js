@@ -199,6 +199,8 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 
 const predictLoan = asyncHandler(async (req, res) => {
   const userData = req.body;
+  console.log(userData);
+  
   // const response = await axios.post("http://localhost:8000/predict", userData);
   // const response = await axios.post(
   //   "http://localhost:8000/recommend",
