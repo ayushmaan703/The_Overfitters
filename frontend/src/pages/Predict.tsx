@@ -177,10 +177,7 @@ const Predict = () => {
   const riskPercent = verdict ? Math.round(verdict.risk_score * 100) : null;
 
   const inputCls = "h-10 bg-input/60";
-<<<<<<< HEAD
-  console.log(verdict?.recommendations?.recommendations?.length);
-=======
->>>>>>> c2050e8e3e4f134f11a3903da62b0e00360e6ecc
+  // console.log(verdict?.recommendations?.recommendations?.length);
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden bg-background pb-24 pt-6">
@@ -376,15 +373,15 @@ const Predict = () => {
                     </Button>
 
 <<<<<<< HEAD
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      onClick={handleReset}
-                      className="h-11 text-muted-foreground hover:text-foreground"
-                    >
-                      <RotateCcw className="mr-2 h-4 w-4" />
-                      Reset
-                    </Button>
+  <Button
+    type="button"
+    variant="ghost"
+    onClick={handleReset}
+    className="h-11 text-muted-foreground hover:text-foreground"
+  >
+    <RotateCcw className="mr-2 h-4 w-4" />
+    Reset
+  </Button>
 =======
                     {/* Risk bar */}
                     <div>
@@ -532,13 +529,13 @@ const Predict = () => {
                       </div>
                     )}
 >>>>>>> c2050e8e3e4f134f11a3903da62b0e00360e6ecc
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
+                  </div >
+                </form >
+              </CardContent >
+            </Card >
 
-            {/* Result */}
-            <div className="space-y-6 lg:col-span-2">
+  {/* Result */ }
+  < div className = "space-y-6 lg:col-span-2" >
               <Card
                 className={`border-border ${verdict ? `ring-1 ${decision?.ring}` : ""}`}
                 style={{
@@ -743,11 +740,11 @@ const Predict = () => {
                   <Link to="/">← Back to overview</Link>
                 </Button>
               </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
+            </div >
+          </div >
+        </section >
+      </div >
+    </main >
   );
 };
 
