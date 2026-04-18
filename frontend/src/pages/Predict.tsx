@@ -123,18 +123,18 @@ const Predict = () => {
     //   credit_score: userData.creditScore,
     // };
     const data = {
-  loan_amnt: Number(form.loan_amnt),
-  loan_int_rate: Number(form.loan_int_rate),
-  loan_term: Number(form.loan_term),
-  loan_intent: form.loan_intent,
-  person_home_ownership: form.person_home_ownership,
-  cb_person_default_on_file: form.cb_person_default_on_file,
+      loan_amnt: Number(form.loan_amnt),
+      loan_int_rate: Number(form.loan_int_rate),
+      loan_term: Number(form.loan_term),
+      loan_intent: form.loan_intent,
+      person_home_ownership: form.person_home_ownership,
+      cb_person_default_on_file: form.cb_person_default_on_file,
 
-  person_income: Number(userData.income),
-  person_age: Number(userData.age),
-  person_emp_exp: Number(userData.empExp),
-  credit_score: Number(userData.creditScore),
-};
+      person_income: Number(userData.income),
+      person_age: Number(userData.age),
+      person_emp_exp: Number(userData.empExp),
+      credit_score: Number(userData.creditScore),
+    };
     const res = await dispatch(predictApi(data));
     console.log(res);
 
@@ -177,7 +177,6 @@ const Predict = () => {
   const riskPercent = verdict ? Math.round(verdict.risk_score * 100) : null;
 
   const inputCls = "h-10 bg-input/60";
-console.log(verdict?.recommendations?.recommendations?.length );
 
   return (
     <main className="min-h-screen w-full pb-24 pt-6">
@@ -474,99 +473,102 @@ console.log(verdict?.recommendations?.recommendations?.length );
 
                     {/* Recommendations */}
                     {(verdict.recommendations?.recommendations?.length > 0 ||
-  verdict.recommendations?.message) && (
-  <div>
-    <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-      Recommendations
-    </p>
+                      verdict.recommendations?.message) && (
+                      <div>
+                        <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                          Recommendations
+                        </p>
 
-    <div className="space-y-4">
-      {verdict.recommendations?.recommendations?.length > 0 ? (
-        verdict.recommendations.recommendations.map(
-          (
-            rec: {
-              type: string;
-              new_loan: number;
-              pct_kept: number;
-              risk: number;
-              impact: number;
-            },
-            i: number,
-          ) => (
-            <div
-              key={i}
-              className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 p-5 shadow-sm hover:shadow-md transition"
-            >
-              {/* HEADER */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-emerald-400 font-semibold text-base">
-                  <TrendingDown className="h-4 w-4" />
-                  {rec.type}
-                </div>
+                        <div className="space-y-4">
+                          {verdict.recommendations?.recommendations?.length >
+                          0 ? (
+                            verdict.recommendations.recommendations.map(
+                              (
+                                rec: {
+                                  type: string;
+                                  new_loan: number;
+                                  pct_kept: number;
+                                  risk: number;
+                                  impact: number;
+                                },
+                                i: number,
+                              ) => (
+                                <div
+                                  key={i}
+                                  className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 p-5 shadow-sm hover:shadow-md transition"
+                                >
+                                  {/* HEADER */}
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2 text-emerald-400 font-semibold text-base">
+                                      <TrendingDown className="h-4 w-4" />
+                                      {rec.type}
+                                    </div>
 
-                <span className="rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-400">
-                  −{Math.round(rec.impact * 100)}%
-                </span>
-              </div>
+                                    <span className="rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-400">
+                                      −{Math.round(rec.impact * 100)}%
+                                    </span>
+                                  </div>
 
-              {/* MAIN STATS */}
-              <div className="mt-4 grid grid-cols-2 gap-4">
-                <div className="rounded-lg bg-background/40 border px-3 py-2">
-                  <p className="text-[11px] text-muted-foreground">
-                    Suggested Loan
-                  </p>
-                  <p className="text-lg font-semibold text-foreground">
-                    {rec.new_loan.toLocaleString()}
-                  </p>
-                  <p className="text-[11px] text-muted-foreground">
-                    {Math.round(rec.pct_kept * 100)}% of original
-                  </p>
-                </div>
+                                  {/* MAIN STATS */}
+                                  <div className="mt-4 grid grid-cols-2 gap-4">
+                                    <div className="rounded-lg bg-background/40 border px-3 py-2">
+                                      <p className="text-[11px] text-muted-foreground">
+                                        Suggested Loan
+                                      </p>
+                                      <p className="text-lg font-semibold text-foreground">
+                                        {rec.new_loan.toLocaleString()}
+                                      </p>
+                                      <p className="text-[11px] text-muted-foreground">
+                                        {Math.round(rec.pct_kept * 100)}% of
+                                        original
+                                      </p>
+                                    </div>
 
-                <div className="rounded-lg bg-background/40 border px-3 py-2">
-                  <p className="text-[11px] text-muted-foreground">
-                    New Risk Score
-                  </p>
-                  <p className="text-lg font-semibold text-emerald-400">
-                    {Math.round(rec.risk * 100)}%
-                  </p>
-                  <p className="text-[11px] text-muted-foreground">
-                    after adjustment
-                  </p>
-                </div>
-              </div>
+                                    <div className="rounded-lg bg-background/40 border px-3 py-2">
+                                      <p className="text-[11px] text-muted-foreground">
+                                        New Risk Score
+                                      </p>
+                                      <p className="text-lg font-semibold text-emerald-400">
+                                        {Math.round(rec.risk * 100)}%
+                                      </p>
+                                      <p className="text-[11px] text-muted-foreground">
+                                        after adjustment
+                                      </p>
+                                    </div>
+                                  </div>
 
-              {/* FOOTER */}
-              <div className="mt-4 text-xs text-muted-foreground">
-                This adjustment lowers default probability by{" "}
-                <span className="font-medium text-emerald-400">
-                  {Math.round(rec.impact * 100)}%
-                </span>
-                .
-              </div>
-            </div>
-          ),
-        )
-      ) : (
-        // ✅ EMPTY STATE (NOW WORKS)
-        <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-amber-500/5 p-5 text-center">
-          <div className="flex flex-col items-center gap-2">
-            <ShieldAlert className="h-6 w-6 text-amber-400" />
+                                  {/* FOOTER */}
+                                  <div className="mt-4 text-xs text-muted-foreground">
+                                    This adjustment lowers default probability
+                                    by{" "}
+                                    <span className="font-medium text-emerald-400">
+                                      {Math.round(rec.impact * 100)}%
+                                    </span>
+                                    .
+                                  </div>
+                                </div>
+                              ),
+                            )
+                          ) : (
+                            // ✅ EMPTY STATE (NOW WORKS)
+                            <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-amber-500/5 p-5 text-center">
+                              <div className="flex flex-col items-center gap-2">
+                                <ShieldAlert className="h-6 w-6 text-amber-400" />
 
-            <p className="text-sm font-semibold text-amber-400">
-              No simple recommendation available
-            </p>
+                                <p className="text-sm font-semibold text-amber-400">
+                                  No simple recommendation available
+                                </p>
 
-            <p className="text-xs text-muted-foreground max-w-xs">
-              {verdict.recommendations?.message ||
-                "Try reducing loan amount or improving credit score."}
-            </p>
-          </div>
-        </div>
-      )}
-    </div>
-  </div>
-)}
+                                <p className="text-xs text-muted-foreground max-w-xs">
+                                  {verdict.recommendations?.message ||
+                                    "Try reducing loan amount or improving credit score."}
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </CardContent>
