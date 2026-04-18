@@ -106,7 +106,7 @@ const Register = () => {
           </div>
 
           <h1 className="sr-only">
-            Credit Wise AI — AI-Powered Loan Default Prediction
+            Credit Wise AI - AI-Powered Loan Default Prediction
           </h1>
         </section>
 

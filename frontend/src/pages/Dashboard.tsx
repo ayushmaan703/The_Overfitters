@@ -45,7 +45,7 @@ const features = [
   {
     icon: BarChart3,
     title: "Cohort & scenario analytics",
-    body: "Stress-test your book against macro shocks — interest rate spikes, unemployment, and sector slowdowns.",
+    body: "Stress-test your book against macro shocks - interest rate spikes, unemployment, and sector slowdowns.",
   },
 ];
 
@@ -83,7 +83,7 @@ const faqs = [
   },
   {
     q: "Is the model fair and bias-free?",
-    a: "Yes — we monitor disparate impact across protected attributes and apply post-processing fairness constraints. Every decision ships with a SHAP explanation.",
+    a: "Yes - we monitor disparate impact across protected attributes and apply post-processing fairness constraints. Every decision ships with a SHAP explanation.",
   },
   {
     q: "What data do I need to get started?",
@@ -165,7 +165,7 @@ const Dashboard = () => {
               <p className="pointer-events-auto text-base leading-relaxed text-muted-foreground drop-shadow sm:text-lg">
                 Credit Wise AI analyzes income patterns, repayment history, employment
                 stability, and economic indicators to give your credit team a precise
-                probability of default — in milliseconds.
+                probability of default - in milliseconds.
               </p>
 
               <form
@@ -291,7 +291,7 @@ const Dashboard = () => {
               <p className="mt-3 text-muted-foreground">
                 Our ensemble combines gradient-boosted trees with a neural
                 module for sequential repayment behavior. Trained on diverse
-                portfolios — personal, SME, auto, and mortgage.
+                portfolios - personal, SME, auto, and mortgage.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <div className="rounded-xl border border-border bg-secondary/60 px-4 py-3">

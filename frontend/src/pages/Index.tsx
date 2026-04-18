@@ -100,7 +100,7 @@ const Index = () => {
           </div>
 
           <h1 className="sr-only">
-            Credit Wise AI — AI-Powered Loan Default Prediction
+            Credit Wise AI - AI-Powered Loan Default Prediction
           </h1>
         </section>
 
@@ -136,7 +136,7 @@ const Index = () => {
               </div>
 
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
+                {/* <div className="flex items-center justify-between">
                   <Label htmlFor="password">Password</Label>
                   <button
                     type="button"
@@ -147,7 +147,7 @@ const Index = () => {
                   >
                     Forgot your password?
                   </button>
-                </div>
+                </div> */}
                 <Input
                   id="password"
                   type="password"
@@ -191,16 +191,16 @@ const Index = () => {
                   Sign up
                 </button>
               </p>
-
+              {/* 
               <div className="flex items-center gap-3">
                 <Separator className="flex-1" />
                 <span className="text-xs uppercase tracking-wider text-muted-foreground">
                   or
                 </span>
                 <Separator className="flex-1" />
-              </div>
+              </div> */}
 
-              <div className="space-y-3">
+              {/* <div className="space-y-3">
                 <Button
                   type="button"
                   variant="outline"
@@ -219,7 +219,7 @@ const Index = () => {
                   <MicrosoftIcon className="mr-2 h-4 w-4" />
                   Sign in with Microsoft
                 </Button>
-              </div>
+              </div> */}
             </form>
           </div>
         </section>
