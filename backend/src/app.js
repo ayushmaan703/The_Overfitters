@@ -8,6 +8,7 @@ app.use(
     cors({
         origin: [
             "https://the-overfitters.vercel.app",
+            "http://localhost:8080"
         ],
         credentials: true, 
         methods: "GET,POST,PUT,DELETE,OPTIONS,PATCH",

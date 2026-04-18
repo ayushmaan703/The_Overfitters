@@ -177,7 +177,10 @@ const Predict = () => {
   const riskPercent = verdict ? Math.round(verdict.risk_score * 100) : null;
 
   const inputCls = "h-10 bg-input/60";
+<<<<<<< HEAD
   console.log(verdict?.recommendations?.recommendations?.length);
+=======
+>>>>>>> c2050e8e3e4f134f11a3903da62b0e00360e6ecc
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden bg-background pb-24 pt-6">
@@ -372,6 +375,7 @@ const Predict = () => {
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
 
+<<<<<<< HEAD
                     <Button
                       type="button"
                       variant="ghost"
@@ -381,6 +385,153 @@ const Predict = () => {
                       <RotateCcw className="mr-2 h-4 w-4" />
                       Reset
                     </Button>
+=======
+                    {/* Risk bar */}
+                    <div>
+                      <div className="mb-2 flex items-center justify-between text-xs text-muted-foreground">
+                        <span>Risk index</span>
+                        <span className="tabular-nums">{riskPercent}/100</span>
+                      </div>
+                      <Progress value={riskPercent} className="h-2" />
+                    </div>
+
+                    {/* Top risk factors */}
+                    <div>
+                      <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        Top risk drivers
+                      </p>
+                      <ul className="space-y-2">
+                        {verdict.top_risk_factors.map(
+                          (d: {
+                            feature: string;
+                            shap_value: number;
+                            direction: string;
+                          }) => {
+                            const increases = d.direction === "increases risk";
+                            return (
+                              <li
+                                key={d.feature}
+                                className="flex items-center justify-between rounded-lg border border-border bg-background/40 px-3 py-2 text-sm"
+                              >
+                                <span className="text-foreground">
+                                  {formatFeatureName(d.feature)}
+                                </span>
+                                <Badge
+                                  variant="outline"
+                                  className={
+                                    increases
+                                      ? "border-red-500/30 text-red-400"
+                                      : "border-emerald-500/30 text-emerald-400"
+                                  }
+                                >
+                                  {increases ? "↑ risk" : "↓ risk"}
+                                </Badge>
+                              </li>
+                            );
+                          },
+                        )}
+                      </ul>
+                    </div>
+
+                    {/* Recommendations */}
+                    {(verdict.recommendations?.recommendations?.length > 0 ||
+                      verdict.recommendations?.message) && (
+                      <div>
+                        <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                          Recommendations
+                        </p>
+
+                        <div className="space-y-4">
+                          {verdict.recommendations?.recommendations?.length >
+                          0 ? (
+                            verdict.recommendations.recommendations.map(
+                              (
+                                rec: {
+                                  type: string;
+                                  new_loan: number;
+                                  pct_kept: number;
+                                  risk: number;
+                                  impact: number;
+                                },
+                                i: number,
+                              ) => (
+                                <div
+                                  key={i}
+                                  className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 p-5 shadow-sm hover:shadow-md transition"
+                                >
+                                  {/* HEADER */}
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2 text-emerald-400 font-semibold text-base">
+                                      <TrendingDown className="h-4 w-4" />
+                                      {rec.type}
+                                    </div>
+
+                                    <span className="rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-400">
+                                      −{Math.round(rec.impact * 100)}%
+                                    </span>
+                                  </div>
+
+                                  {/* MAIN STATS */}
+                                  <div className="mt-4 grid grid-cols-2 gap-4">
+                                    <div className="rounded-lg bg-background/40 border px-3 py-2">
+                                      <p className="text-[11px] text-muted-foreground">
+                                        Suggested Loan
+                                      </p>
+                                      <p className="text-lg font-semibold text-foreground">
+                                        {rec.new_loan.toLocaleString()}
+                                      </p>
+                                      <p className="text-[11px] text-muted-foreground">
+                                        {Math.round(rec.pct_kept * 100)}% of
+                                        original
+                                      </p>
+                                    </div>
+
+                                    <div className="rounded-lg bg-background/40 border px-3 py-2">
+                                      <p className="text-[11px] text-muted-foreground">
+                                        New Risk Score
+                                      </p>
+                                      <p className="text-lg font-semibold text-emerald-400">
+                                        {Math.round(rec.risk * 100)}%
+                                      </p>
+                                      <p className="text-[11px] text-muted-foreground">
+                                        after adjustment
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  {/* FOOTER */}
+                                  <div className="mt-4 text-xs text-muted-foreground">
+                                    This adjustment lowers default probability
+                                    by{" "}
+                                    <span className="font-medium text-emerald-400">
+                                      {Math.round(rec.impact * 100)}%
+                                    </span>
+                                    .
+                                  </div>
+                                </div>
+                              ),
+                            )
+                          ) : (
+                            // ✅ EMPTY STATE (NOW WORKS)
+                            <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-amber-500/5 p-5 text-center">
+                              <div className="flex flex-col items-center gap-2">
+                                <ShieldAlert className="h-6 w-6 text-amber-400" />
+
+                                <p className="text-sm font-semibold text-amber-400">
+                                  No simple recommendation available
+                                </p>
+
+                                <p className="text-xs text-muted-foreground max-w-xs">
+                                  {verdict.recommendations?.message ||
+                                    "Try reducing loan amount or improving credit score."}
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+>>>>>>> c2050e8e3e4f134f11a3903da62b0e00360e6ecc
                   </div>
                 </form>
               </CardContent>
